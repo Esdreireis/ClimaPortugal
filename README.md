@@ -1,7 +1,5 @@
 # ClimaPortugal
 
-# Clima Portugal
-
 Aplicação web para consulta de dados meteorológicos das cidades de Portugal utilizando a API Open-Meteo.
 
 ## Funcionalidades
