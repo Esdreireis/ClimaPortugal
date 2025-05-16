@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= titulo %> | Clima Portugal</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+  <meta name="description" content="Aplicação para consulta de clima em cidades de Portugal">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <a href="/">
+          <img src="/images/icons/logo.svg" alt="Clima Portugal Logo" class="logo-img">
+          <h1>Clima Portugal</h1>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <%- body %>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; <%= new Date().getFullYear() %> Clima Portugal. Desenvolvido com Node.js e Express.</p>
+    </div>
+  </footer>
+</body>
+</html> 

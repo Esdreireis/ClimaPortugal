@@ -1,0 +1,15 @@
+<%- include('partials/header', { titulo: titulo }) %>
+
+<section class="erro-section">
+  <div class="erro-container">
+    <h2>Ocorreu um erro</h2>
+    <div class="erro-mensagem">
+      <p><%= mensagem %></p>
+    </div>
+    <div class="erro-actions">
+      <a href="/" class="btn btn-primary">Voltar para a página inicial</a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %> 

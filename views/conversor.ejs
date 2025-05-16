@@ -1,0 +1,80 @@
+<%- include('partials/header', { titulo: titulo }) %>
+
+<section class="conversor-section">
+  <h2>Conversor de Formatos</h2>
+  
+  <% if (mensagem) { %>
+    <div class="mensagem <%= mensagem.includes('sucesso') ? 'sucesso' : mensagem.includes('Erro') ? 'erro' : 'info' %>">
+      <%= mensagem %>
+    </div>
+  <% } %>
+  
+  <div class="conversor-container">
+    <div class="conversor-content">      <h3>Converter CSV para MySQL ou MySQL para CSV</h3>
+      <p>Selecione um arquivo CSV ou SQL para converter automaticamente.</p>
+      
+      <form action="/conversor/converter" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="arquivo">Selecione um arquivo:</label>
+          <input type="file" id="arquivo" name="arquivo" accept=".csv,.sql" required>
+        </div>
+        
+        <p class="conversor-info">Sobre a conversão:</p>
+        <ul class="conversor-info-list">
+          <li>Para arquivos CSV:</li>
+          <ul>
+            <li>Converte qualquer arquivo CSV para comandos MySQL</li>
+            <li>Cria uma tabela chamada 'dados_importados'</li>
+            <li>Detecta automaticamente as colunas do arquivo</li>
+            <li>Preserva todos os tipos de dados como VARCHAR(255)</li>
+          </ul>
+          <li>Para arquivos SQL:</li>
+          <ul>
+            <li>Extrai dados de comandos INSERT INTO</li>
+            <li>Gera um arquivo CSV com todos os campos</li>
+            <li>Mantém a estrutura original dos dados</li>
+          </ul>
+        </ul>
+        
+        <button type="submit" class="btn btn-primary">Converter</button>
+      </form>
+    </div>
+  </div>
+  
+  <% if (previewData) { %>
+    <div class="preview-container">
+      <h3>Pré-visualização do resultado</h3>
+      
+      <div class="preview-content">
+        <pre><code><%= previewData.conteudo %></code></pre>
+      </div>
+      
+      <div class="preview-actions">
+        <a href="/conversor/download/<%= previewData.nomeArquivo %>" class="btn btn-success">
+          Baixar arquivo <%= previewData.tipo.toUpperCase() %>
+        </a>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('arquivo');
+    
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const fileName = file.name.toLowerCase();
+          if (!fileName.endsWith('.csv') && !fileName.endsWith('.sql')) {
+            alert('Por favor, selecione um arquivo CSV ou SQL válido.');
+            fileInput.value = '';
+          }
+        }
+      });
+    }
+  });
+</script>
+
+<%- include('partials/footer') %> 

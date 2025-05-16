@@ -1,0 +1,118 @@
+<%- include('partials/header', { titulo: titulo }) %>
+
+<div class="dashboard-layout">
+  <!-- Coluna esquerda -->
+  <div class="dashboard-column">
+    <div class="dashboard-card anedota-container">
+      <div class="card-header">
+        <h3>Anedota do dia</h3>
+        <button id="nova-anedota" class="btn btn-small">Nova anedota</button>
+      </div>
+      <p id="anedota-texto" class="anedota-texto"><%= anedota %></p>
+    </div>
+
+    <div class="dashboard-card clima-atual">
+      <h3>Clima atual em <%= cidadePadrao %></h3>
+      <div class="clima-card">
+        <div class="clima-icon">
+          <img src="/images/icons/<%= dadosClima.estadoChuva.replace(/\s+/g, '-') %>.svg" alt="<%= dadosClima.estadoChuva %>" class="weather-icon">
+        </div>
+        <div class="clima-info">
+          <div class="temperatura">
+            <span class="valor"><%= dadosClima.temperatura %></span>
+            <span class="unidade"><%= dadosClima.unidadeTemperatura %></span>
+          </div>
+          <div class="detalhes">
+            <p>Sensação térmica: <%= dadosClima.sensacaoTermica %> <%= dadosClima.unidadeSensacaoTermica %></p>
+            <p>Humidade: <%= dadosClima.humidade %> <%= dadosClima.unidadeHumidade %></p>
+            <p>Vento: <%= dadosClima.velocidadeVento %> <%= dadosClima.unidadeVento %></p>
+            <p>Precipitação: <%= dadosClima.estadoChuva %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coluna direita -->
+  <div class="dashboard-column">
+    <div class="dashboard-card consulta-clima">
+      <h3>Consultar clima</h3>
+      <div class="select-container">
+        <label for="cidade-select">Selecione uma cidade:</label>
+        <select id="cidade-select" name="cidade">
+          <option value="">-- Selecione uma cidade --</option>
+        </select>
+      </div>
+      
+      <div id="clima-resultado" class="resultado-container hidden">
+        <!-- Resultados serão exibidos aqui -->
+      </div>
+    </div>
+
+    <!-- Conversor simplificado -->
+    <div class="dashboard-card conversor-section">
+      <h3>Conversor CSV/MySQL</h3>
+      
+      <div class="conversor-content">
+        <form action="/conversor/converter" method="post" enctype="multipart/form-data" class="simple-form">
+          <div class="form-group">
+            <label for="arquivo">Selecione um arquivo CSV ou MySQL:</label>
+            <input type="file" id="arquivo" name="arquivo" accept=".csv,.sql" required>
+          </div>
+          <p class="conversor-info">O sistema detectará automaticamente o formato do arquivo e fará a conversão apropriada.</p>
+          <button type="submit" class="btn btn-primary">Converter</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Botões de exportação -->
+    <div class="dashboard-card botoes-exportacao hidden" id="botoes-exportacao">
+      <h3>Exportar dados</h3>
+      <div class="button-group">
+        <button id="exportar-csv" class="btn btn-primary">Salvar como CSV</button>
+        <button id="exportar-sql" class="btn btn-secondary">Salvar como MySQL</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Logo simplificado -->
+<div class="logos-section">
+  <div class="logos-container">
+    <img src="/images/pessoas2030.png" alt="Pessoas 2030 Logo" class="section-logo">
+  </div>
+</div>
+
+<script src="/js/cidades.js"></script>
+<script src="/js/clima.js"></script>
+<script src="/js/conversor.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnNovaAnedota = document.getElementById('nova-anedota');
+    const textoAnedota = document.getElementById('anedota-texto');
+    
+    if (btnNovaAnedota) {
+      btnNovaAnedota.addEventListener('click', async () => {
+        try {
+          btnNovaAnedota.disabled = true;
+          textoAnedota.textContent = 'Carregando nova anedota...';
+          
+          const response = await fetch('/nova-anedota');
+          if (response.ok) {
+            const data = await response.json();
+            textoAnedota.textContent = data.anedota;
+          } else {
+            textoAnedota.textContent = 'Não foi possível carregar uma anedota. Tente novamente.';
+          }
+        } catch (error) {
+          textoAnedota.textContent = 'Erro ao carregar anedota. Tente novamente.';
+          console.error('Erro:', error);
+        } finally {
+          btnNovaAnedota.disabled = false;
+        }
+      });
+    }
+  });
+</script>
+
+<%- include('partials/footer') %> 
